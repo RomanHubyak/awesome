@@ -12,7 +12,7 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
 
 builder.Services.AddDbContext<AwesomeDbContext>(options =>
 {
-    options.UseSqlServer("Server=awesome.database.windows.net;Initial Catalog=AwesomeSqlDatabase;User ID=roman;Password=0123Roma;Encrypt=True;TrustServerCertificate=False;");
+    options.UseSqlServer("Server=awesome.database.windows.net;Initial Catalog=AwesomeSqlDatabase;User ID=roman;Password=0123Roma;Encrypt=True;TrustServerCertificate=False;", o => o.CommandTimeout(120));
 });
 
 builder.Services.AddHostedService<SqlHostedServer>();

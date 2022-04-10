@@ -1,4 +1,5 @@
-﻿using Awesome.Enums;
+﻿using Awesome.Entities;
+using Awesome.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -200,6 +201,7 @@ public class ActionsController : ControllerBase
 
         _awesomeDbContext.TodoLists
             .AsQueryable()
+            .Where(x => x.Id > todoListId)
             .ToList();
 
         _awesomeDbContext.TodoLists
@@ -228,6 +230,8 @@ public class ActionsController : ControllerBase
             .Where(x => x.Status == ETodoListStatus.Canceled)
             .ToList();
 
+        var todoItemId = random.Next(1000000);
+
         _awesomeDbContext.TodoItems
             .AsQueryable()
             .Select(x => new
@@ -237,10 +241,32 @@ public class ActionsController : ControllerBase
                 x.TodoListId,
                 TodoListName = x.TodoList.Name,
             })
-            .Where(x => x.Id > random.Next(1000000))
+            .Where(x => x.Id > todoItemId)
             .OrderBy(x => x.TodoListId)
             .Take(random.Next(100000))
             .ToList();
+
+        var letters = "qwertyuiopasdfghjklzxcvbnm";
+
+        _awesomeDbContext.TodoLists.Add(new TodoList
+        {
+            CreatedDate = DateTime.UtcNow,
+            IsDeleted = random.Next(2) == 1,
+            Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+            Status = (ETodoListStatus)(random.Next(4) + 1),
+        });
+
+        _awesomeDbContext.TodoItems.Add(new TodoItem
+        {
+            CreatedDate = DateTime.UtcNow,
+            IsDeleted = random.Next(2) == 1,
+            Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+            Description = new string(Enumerable.Repeat(0, random.Next(20)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+            Status = (ETodoItemStatus)(random.Next(4) + 1),
+            TodoListId = todoListId,
+        });
+
+        _awesomeDbContext.SaveChanges();
 
         return Ok();
     }

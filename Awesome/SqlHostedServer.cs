@@ -1,4 +1,5 @@
-﻿using Awesome.Enums;
+﻿using Awesome.Entities;
+using Awesome.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Awesome;
@@ -40,6 +41,7 @@ public class SqlHostedServer : IHostedService
 
             await awesomeDbContext.TodoLists
                 .AsQueryable()
+                .Where(x => x.Id > todoListId)
                 .ToListAsync();
 
             await awesomeDbContext.TodoLists
@@ -68,6 +70,8 @@ public class SqlHostedServer : IHostedService
                 .Where(x => x.Status == ETodoListStatus.Canceled)
                 .ToListAsync();
 
+            var todoItemId = random.Next(1000000);
+
             await awesomeDbContext.TodoItems
                 .AsQueryable()
                 .Select(x => new
@@ -77,10 +81,33 @@ public class SqlHostedServer : IHostedService
                     x.TodoListId,
                     TodoListName = x.TodoList.Name,
                 })
-                .Where(x => x.Id > random.Next(1000000))
+                .Where(x => x.Id > todoItemId)
                 .OrderBy(x => x.TodoListId)
                 .Take(random.Next(100000))
                 .ToListAsync();
+
+            var letters = "qwertyuiopasdfghjklzxcvbnm";
+
+            awesomeDbContext.TodoLists.Add(new TodoList
+            {
+                CreatedDate = DateTime.UtcNow,
+                IsDeleted = random.Next(2) == 1,
+                Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+                Status = (ETodoListStatus)(random.Next(4) + 1),
+            });
+
+            awesomeDbContext.TodoItems.Add(new TodoItem
+            {
+                CreatedDate = DateTime.UtcNow,
+                IsDeleted = random.Next(2) == 1,
+                Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+                Description = new string(Enumerable.Repeat(0, random.Next(20)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+                Status = (ETodoItemStatus)(random.Next(4) + 1),
+                TodoListId = todoListId,
+            });
+
+            await awesomeDbContext.SaveChangesAsync();
+
         }
     }
 }
