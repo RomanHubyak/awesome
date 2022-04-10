@@ -243,7 +243,7 @@ public class ActionsController : ControllerBase
             })
             .Where(x => x.Id > todoItemId)
             .OrderBy(x => x.TodoListId)
-            .Take(random.Next(1000))
+            .Take(random.Next(100))
             .ToList();
 
         var letters = "qwertyuiopasdfghjklzxcvbnm";
