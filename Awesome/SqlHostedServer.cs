@@ -16,6 +16,7 @@ public class SqlHostedServer : IHostedService
     public Task StartAsync(CancellationToken cancellationToken)
     {
         Run();
+        Run2();
 
         return Task.CompletedTask;
     }
@@ -106,6 +107,29 @@ public class SqlHostedServer : IHostedService
                 });
 
                 await awesomeDbContext.SaveChangesAsync();
+            }
+            catch
+            {
+            }
+        }
+    }
+
+    private async void Run2()
+    {
+        while (true)
+        {
+            try
+            {
+                using var scope = _serviceProvider.CreateScope();
+
+                var awesomeDbContext = scope.ServiceProvider.GetService<AwesomeDbContext>();
+
+                await awesomeDbContext.TodoLists
+                    .AsQueryable()
+                    .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
+                    .Where(x => x.Status == ETodoListStatus.Planned
+                                && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
+                    .ToListAsync();
             }
             catch
             {
