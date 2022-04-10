@@ -54,22 +54,19 @@ public class SqlHostedServer : IHostedService
 
                 await awesomeDbContext.TodoLists
                     .AsQueryable()
-                    .Where(x => x.Status == ETodoListStatus.Planned)
-                    .ToListAsync();
-
-                await awesomeDbContext.TodoLists
-                    .AsQueryable()
-                    .Where(x => x.Status == ETodoListStatus.Started)
-                    .ToListAsync();
-
-                await awesomeDbContext.TodoLists
-                    .AsQueryable()
                     .Where(x => x.Status == ETodoListStatus.Completed)
                     .ToListAsync();
 
                 await awesomeDbContext.TodoLists
                     .AsQueryable()
                     .Where(x => x.Status == ETodoListStatus.Canceled)
+                    .ToListAsync();
+
+                await awesomeDbContext.TodoLists
+                    .AsQueryable()
+                    .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
+                    .Where(x => x.Status == ETodoListStatus.Planned
+                                && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
                     .ToListAsync();
 
                 var todoItemId = random.Next(1000000);

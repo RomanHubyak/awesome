@@ -222,12 +222,9 @@ public class ActionsController : ControllerBase
 
         _awesomeDbContext.TodoLists
             .AsQueryable()
-            .Where(x => x.Status == ETodoListStatus.Completed)
-            .ToList();
-
-        _awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Where(x => x.Status == ETodoListStatus.Canceled)
+            .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
+            .Where(x => x.Status == ETodoListStatus.Planned
+                        && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
             .ToList();
 
         var todoItemId = random.Next(1000000);
