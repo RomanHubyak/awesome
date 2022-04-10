@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Awesome.Enums;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Awesome.Controllers;
 
@@ -6,6 +8,13 @@ namespace Awesome.Controllers;
 [Route("api/[controller]")]
 public class ActionsController : ControllerBase
 {
+    private readonly AwesomeDbContext _awesomeDbContext;
+
+    public ActionsController(AwesomeDbContext awesomeDbContext)
+    {
+        _awesomeDbContext = awesomeDbContext;
+    }
+
     [HttpGet]
     public IActionResult Default()
     {
@@ -176,6 +185,62 @@ public class ActionsController : ControllerBase
         using var httpClient = new HttpClient();
 
         httpClient.GetAsync("https://google.com").Wait();
+
+        return Ok();
+    }
+
+    [HttpGet("database")]
+    public IActionResult Database()
+    {
+        var random = new Random();
+
+        var todoListId = random.Next(_awesomeDbContext.TodoLists
+            .AsQueryable()
+            .Count());
+
+        _awesomeDbContext.TodoLists
+            .AsQueryable()
+            .ToList();
+
+        _awesomeDbContext.TodoLists
+            .AsQueryable()
+            .Include(x => x.TodoItems)
+            .Where(x => x.Id == todoListId)
+            .ToList();
+
+        _awesomeDbContext.TodoLists
+            .AsQueryable()
+            .Where(x => x.Status == ETodoListStatus.Planned)
+            .ToList();
+
+        _awesomeDbContext.TodoLists
+            .AsQueryable()
+            .Where(x => x.Status == ETodoListStatus.Started)
+            .ToList();
+
+        _awesomeDbContext.TodoLists
+            .AsQueryable()
+            .Where(x => x.Status == ETodoListStatus.Completed)
+            .ToList();
+
+        _awesomeDbContext.TodoLists
+            .AsQueryable()
+            .Where(x => x.Status == ETodoListStatus.Canceled)
+            .ToList();
+
+        _awesomeDbContext.TodoItems
+            .AsQueryable()
+            .Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.TodoListId,
+                TodoListName = x.TodoList.Name,
+            })
+            .Where(x => x.Id > random.Next(1000000))
+            .OrderBy(x => x.TodoListId)
+            .Take(random.Next(100000))
+            .ToList();
 
         return Ok();
     }
