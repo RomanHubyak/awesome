@@ -85,7 +85,7 @@ public class SqlHostedServer : IHostedService
                     })
                     .Where(x => x.Id > todoItemId)
                     .OrderBy(x => x.TodoListId)
-                    .Take(random.Next(10000))
+                    .Take(random.Next(1000))
                     .ToListAsync();
 
                 var letters = "qwertyuiopasdfghjklzxcvbnm";
