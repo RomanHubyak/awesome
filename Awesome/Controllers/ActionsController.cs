@@ -51,11 +51,17 @@ public class ActionsController : ControllerBase
     [HttpGet("cpu1")]
     public IActionResult Cpu1()
     {
+        var n = int.MaxValue / 4;
+
+        Task.Delay(1000).Wait();
+
         Task.WaitAll(
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }));
+
+        Task.Delay(1000).Wait();
 
         return Ok();
     }
@@ -63,15 +69,21 @@ public class ActionsController : ControllerBase
     [HttpGet("cpu2")]
     public IActionResult Cpu2()
     {
+        var n = int.MaxValue / 4;
+
+        Task.Delay(1000).Wait();
+
         Task.WaitAll(
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }),
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }));
+
+        Task.Delay(1000).Wait();
 
         return Ok();
     }
@@ -79,27 +91,33 @@ public class ActionsController : ControllerBase
     [HttpGet("cpu5")]
     public IActionResult Cpu5()
     {
+        var n = int.MaxValue / 4;
+
+        Task.Delay(1000).Wait();
+
         Task.WaitAll(
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }),
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }),
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }),
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }),
             Task.Run(() =>
             {
-                for (var i = 1; i < int.MaxValue; i++) ;
+                for (var i = 1; i < n; i++) ;
             }));
+
+        Task.Delay(1000).Wait();
 
         return Ok();
     }
@@ -107,7 +125,11 @@ public class ActionsController : ControllerBase
     [HttpGet("memory1")]
     public IActionResult Memory1()
     {
+        Task.Delay(1000).Wait();
+
         _ = new int[100_000_000];
+
+        Task.Delay(1000).Wait();
 
         GC.Collect();
 
@@ -117,7 +139,11 @@ public class ActionsController : ControllerBase
     [HttpGet("memory2")]
     public IActionResult Memory2()
     {
+        Task.Delay(1000).Wait();
+
         _ = new int[200_000_000];
+
+        Task.Delay(1000).Wait();
 
         GC.Collect();
 
@@ -127,7 +153,11 @@ public class ActionsController : ControllerBase
     [HttpGet("memory5")]
     public IActionResult Memory5()
     {
+        Task.Delay(1000).Wait();
+
         _ = new int[500_000_000];
+
+        Task.Delay(1000).Wait();
 
         GC.Collect();
 
