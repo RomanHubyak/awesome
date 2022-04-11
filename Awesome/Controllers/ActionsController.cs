@@ -227,20 +227,27 @@ public class ActionsController : ControllerBase
         //                && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
         //    .ToList();
 
-        var todoItemId = random.Next(1000000);
+        //var todoItemId = random.Next(1000000);
 
-        _awesomeDbContext.TodoItems
+        //_awesomeDbContext.TodoItems
+        //    .AsQueryable()
+        //    .Select(x => new
+        //    {
+        //        x.Id,
+        //        x.Name,
+        //        x.TodoListId,
+        //        TodoListName = x.TodoList.Name,
+        //    })
+        //    .Where(x => x.Id > todoItemId)
+        //    .OrderBy(x => x.TodoListId)
+        //    .Take(random.Next(100))
+        //    .ToList();
+
+        _awesomeDbContext.TodoLists
             .AsQueryable()
-            .Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.TodoListId,
-                TodoListName = x.TodoList.Name,
-            })
-            .Where(x => x.Id > todoItemId)
-            .OrderBy(x => x.TodoListId)
-            .Take(random.Next(100))
+            .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
+            .Where(x => x.Status == ETodoListStatus.Planned
+                        && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
             .ToList();
 
         //var letters = "qwertyuiopasdfghjklzxcvbnm";
