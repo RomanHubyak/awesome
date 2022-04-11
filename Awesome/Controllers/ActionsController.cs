@@ -195,37 +195,37 @@ public class ActionsController : ControllerBase
     {
         var random = new Random();
 
-        var todoListId = random.Next(_awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Count());
+        //var todoListId = random.Next(_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Count());
 
-        _awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Where(x => x.Id > todoListId)
-            .ToList();
+        //_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Where(x => x.Id > todoListId)
+        //    .ToList();
 
-        _awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Include(x => x.TodoItems)
-            .Where(x => x.Id == todoListId)
-            .ToList();
+        //_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Include(x => x.TodoItems)
+        //    .Where(x => x.Id == todoListId)
+        //    .ToList();
 
-        _awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Where(x => x.Status == ETodoListStatus.Planned)
-            .ToList();
+        //_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Where(x => x.Status == ETodoListStatus.Planned)
+        //    .ToList();
 
-        _awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Where(x => x.Status == ETodoListStatus.Started)
-            .ToList();
+        //_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Where(x => x.Status == ETodoListStatus.Started)
+        //    .ToList();
 
-        _awesomeDbContext.TodoLists
-            .AsQueryable()
-            .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
-            .Where(x => x.Status == ETodoListStatus.Planned
-                        && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
-            .ToList();
+        //_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
+        //    .Where(x => x.Status == ETodoListStatus.Planned
+        //                && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
+        //    .ToList();
 
         var todoItemId = random.Next(1000000);
 
@@ -243,27 +243,27 @@ public class ActionsController : ControllerBase
             .Take(random.Next(100))
             .ToList();
 
-        var letters = "qwertyuiopasdfghjklzxcvbnm";
+        //var letters = "qwertyuiopasdfghjklzxcvbnm";
 
-        _awesomeDbContext.TodoLists.Add(new TodoList
-        {
-            CreatedDate = DateTime.UtcNow,
-            IsDeleted = random.Next(2) == 1,
-            Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
-            Status = (ETodoListStatus)(random.Next(4) + 1),
-        });
+        //_awesomeDbContext.TodoLists.Add(new TodoList
+        //{
+        //    CreatedDate = DateTime.UtcNow,
+        //    IsDeleted = random.Next(2) == 1,
+        //    Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+        //    Status = (ETodoListStatus)(random.Next(4) + 1),
+        //});
 
-        _awesomeDbContext.TodoItems.Add(new TodoItem
-        {
-            CreatedDate = DateTime.UtcNow,
-            IsDeleted = random.Next(2) == 1,
-            Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
-            Description = new string(Enumerable.Repeat(0, random.Next(20)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
-            Status = (ETodoItemStatus)(random.Next(4) + 1),
-            TodoListId = todoListId,
-        });
+        //_awesomeDbContext.TodoItems.Add(new TodoItem
+        //{
+        //    CreatedDate = DateTime.UtcNow,
+        //    IsDeleted = random.Next(2) == 1,
+        //    Name = new string(Enumerable.Repeat(0, random.Next(10)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+        //    Description = new string(Enumerable.Repeat(0, random.Next(20)).Select(x => letters[random.Next(letters.Length)]).ToArray()),
+        //    Status = (ETodoItemStatus)(random.Next(4) + 1),
+        //    TodoListId = todoListId,
+        //});
 
-        _awesomeDbContext.SaveChanges();
+        //_awesomeDbContext.SaveChanges();
 
         return Ok();
     }

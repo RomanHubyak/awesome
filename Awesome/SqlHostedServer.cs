@@ -15,7 +15,7 @@ public class SqlHostedServer : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        Run();
+        //Run();
         Run2();
 
         return Task.CompletedTask;
