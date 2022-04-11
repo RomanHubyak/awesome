@@ -243,11 +243,20 @@ public class ActionsController : ControllerBase
         //    .Take(random.Next(100))
         //    .ToList();
 
+        //_awesomeDbContext.TodoLists
+        //    .AsQueryable()
+        //    .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
+        //    .Where(x => x.Status == ETodoListStatus.Planned
+        //                && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
+        //    .ToList();
+
         _awesomeDbContext.TodoLists
             .AsQueryable()
-            .Include(x => x.TodoItems.Where(y => y.Status == ETodoItemStatus.Planned))
-            .Where(x => x.Status == ETodoListStatus.Planned
-                        && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
+            .Select(x => new
+            {
+                TodoList = x,
+                PlannedItemsCount = x.TodoItems.Count(y => y.Status == ETodoItemStatus.Planned),
+            })
             .ToList();
 
         //var letters = "qwertyuiopasdfghjklzxcvbnm";

@@ -130,6 +130,15 @@ public class SqlHostedServer : IHostedService
                     .Where(x => x.Status == ETodoListStatus.Planned
                                 && x.TodoItems.Any(y => y.Status == ETodoItemStatus.InProgress))
                     .ToListAsync();
+
+                await awesomeDbContext.TodoLists
+                    .AsQueryable()
+                    .Select(x => new
+                    {
+                        TodoList = x,
+                        PlannedItemsCount = x.TodoItems.Count(y => y.Status == ETodoItemStatus.Planned),
+                    })
+                    .ToListAsync();
             }
             catch
             {
